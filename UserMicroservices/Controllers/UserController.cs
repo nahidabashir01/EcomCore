@@ -22,15 +22,5 @@ namespace UserMicroservice.Controllers
 
             return Conflict(result);
         }
-
-        [HttpPost("login")]
-        public async Task<IActionResult> Login(UserLoginDto userDto)
-        {
-            var result = await _userService.LoginUserAsync(userDto);
-            if (result.IsSuccess)
-                return Ok(result);
-
-            return Unauthorized(result);
-        }
     }
 }

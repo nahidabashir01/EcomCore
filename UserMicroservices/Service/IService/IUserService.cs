@@ -5,5 +5,4 @@ using UserMicroservice.Dtos.Request;
 public interface IUserService
 {
     Task<ResponseDto<UserRegistrationDto>> RegisterUserAsync(UserRegistrationDto userDto);
-    Task<ResponseDto<LoginRequest>> LoginUserAsync(UserLoginDto loginDto);
 }
