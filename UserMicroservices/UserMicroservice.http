@@ -1,6 +1,6 @@
-@UserMicroservice_HostAddress = http://localhost:5085
+@UserMicroservice_HostAddress = http://localhost:5065
 
-GET {{UserMicroservice_HostAddress}}/weatherforecast/
+POST {{UserMicroservice_HostAddress}}/api/User/register/
 Accept: application/json
 
 ###
