@@ -22,6 +22,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AppDbContext\AppDbContext.csproj" />
+    <ProjectReference Include="..\Constants\Constants.csproj" />
+    <ProjectReference Include="..\InMemoryCache\InMemoryCache.csproj" />
     <ProjectReference Include="..\ServiceRespnse\ServiceRespnse.csproj" />
   </ItemGroup>
 

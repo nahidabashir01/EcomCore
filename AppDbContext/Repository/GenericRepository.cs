@@ -26,18 +26,16 @@ namespace AppDbContext.Repository
             return await _dbSet.FindAsync(id);
         }
 
-        public async Task<T> AddAsync(T entity)
+        public async Task<bool> AddAsync(T entity)
         {
             await _dbSet.AddAsync(entity);
-            await _context.SaveChangesAsync();
-            return entity;
+            return await SaveChangesAsync();
         }
 
-        public async Task<T> UpdateAsync(T entity)
+        public async Task<bool> UpdateAsync(T entity)
         {
             _dbSet.Update(entity);
-            await _context.SaveChangesAsync();
-            return entity;
+            return await SaveChangesAsync();
         }
 
         public async Task<bool> DeleteAsync(int id)
@@ -46,13 +44,29 @@ namespace AppDbContext.Repository
             if (entity == null) return false;
 
             _dbSet.Remove(entity);
-            await _context.SaveChangesAsync();
-            return true;
+            return await SaveChangesAsync();
         }
 
         public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate)
         {
-            return await _dbSet.Where(predicate).ToListAsync();
+            var data = _dbSet.Where(predicate);
+            return await data.ToListAsync();
+        }
+
+        private async Task<bool> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            var transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
+            try
+            {
+                await _context.SaveChangesAsync(cancellationToken);
+                await transaction.CommitAsync(cancellationToken);
+                return true;
+            }
+            catch (Exception)
+            {
+                await transaction.RollbackAsync(cancellationToken);
+                return false;
+            }
         }
     }
 }

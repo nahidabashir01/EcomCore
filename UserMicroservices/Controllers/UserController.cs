@@ -14,7 +14,7 @@ namespace UserMicroservice.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register(UserRegistrationDto userDto)
+        public async Task<IActionResult> RegisterUserAsync(UserRegistrationDto userDto)
         {
             var result = await _userService.RegisterUserAsync(userDto);
             if (result.IsSuccess)
@@ -23,14 +23,14 @@ namespace UserMicroservice.Controllers
             return Conflict(result);
         }
 
-        [HttpPost("login")]
-        public async Task<IActionResult> Login(UserLoginDto userDto)
+        [HttpGet("users")]
+        public async Task<IActionResult> GetAllUsersAsync()
         {
-            var result = await _userService.LoginUserAsync(userDto);
+            var result = await _userService.GetAllUsersAsync();
             if (result.IsSuccess)
                 return Ok(result);
 
-            return Unauthorized(result);
+            return NotFound(result);
         }
     }
 }
