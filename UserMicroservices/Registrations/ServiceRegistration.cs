@@ -9,6 +9,8 @@ using AppDbContext.DBContext;
 using Microsoft.EntityFrameworkCore;
 using UserMicroservice.Dtos.Request.RequestValidator;
 using Microsoft.AspNetCore.Identity;
+using InMemoryCache.Repository.IRepository;
+using InMemoryCache.Repository;
 
 namespace UserMicroservice.Registrations
 {
@@ -24,6 +26,7 @@ namespace UserMicroservice.Registrations
             services.AddScoped<IGenericRepository<User>, GenericRepository<User>>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IResponseRepository, ResponseRepository>();
+            services.AddScoped<ICacheRepository, CacheRepository>();
 
             return services;
         }

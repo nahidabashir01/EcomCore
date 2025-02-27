@@ -4,3 +4,4 @@ POST {{UserMicroservice_HostAddress}}/api/User/register/
 Accept: application/json
 
 ###
+GET {{UserMicroservice_HostAddress}}/api/User/users/

@@ -1,8 +1,9 @@
-﻿using System.Runtime.Caching;
+﻿using InMemoryCache.Repository.IRepository;
+using System.Runtime.Caching;
 
 namespace InMemoryCache.Repository
 {
-    public class CacheRepository
+    public class CacheRepository : ICacheRepository
     {
         ObjectCache _memoryCache = MemoryCache.Default;
         private static readonly object _lock = new();

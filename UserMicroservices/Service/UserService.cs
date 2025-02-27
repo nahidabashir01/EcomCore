@@ -43,19 +43,19 @@ public class UserService : IUserService
         var databaseResponse = await _repository.AddAsync(newUser);
         if (databaseResponse)
         {
-            var setCacheResponse =await SetData(CacheKeys.User);
+            var setCacheResponse =await SetDataAsync(CacheKeys.User);
             return await _responseRepository.FormatResponseAsync(true, StatusCode.Created, ResponseMessages.CreatedMessage, userDto);
         }
         return await _responseRepository.FormatResponseAsync(false, StatusCode.BadRequest, ResponseMessages.BadRequestMessage, userDto);
     }
 
-    public async Task<ResponseDto<IEnumerable<User>>> ReadAllUserAsync()
+    public async Task<ResponseDto<IEnumerable<User>>> GetAllUsersAsync()
     {
-        var userList = GetData(CacheKeys.User);
+        var userList = await GetDataAsync(CacheKeys.User);
 
         if (userList.IsNullOrEmpty())
         {
-            var setCacheResponse = await SetData(CacheKeys.User);
+            var setCacheResponse = await SetDataAsync(CacheKeys.User);
             userList = setCacheResponse.Item2;
             if (setCacheResponse.Item1)
             {
@@ -66,9 +66,10 @@ public class UserService : IUserService
         return await _responseRepository.FormatResponseAsync(true, (int)HttpStatusCode.OK, "Success", userList);
     }
 
-    private IEnumerable<User> GetData(string key)
+    private async Task<IEnumerable<User>> GetDataAsync(string key)
     {
         var cacheData = _cacheRepository.GetData<IEnumerable<User>>(key);
+        await Task.CompletedTask;
         if (cacheData != null)
         {
             return cacheData;
@@ -76,11 +77,12 @@ public class UserService : IUserService
         return null;
     }
 
-    private async Task<(bool,IEnumerable<User>)> SetData(string key)
+    private async Task<(bool,IEnumerable<User>)> SetDataAsync(string key)
     {
         var data = await _repository.GetAllAsync();
         var expirationTime = DateTimeOffset.Now.AddMinutes(5.0);
         var success = _cacheRepository.SetData(key, data, expirationTime);
+        await Task.CompletedTask;
         return (success,data);
     }
 }
