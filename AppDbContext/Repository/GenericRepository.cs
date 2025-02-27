@@ -1,4 +1,5 @@
-﻿using AppDbContext.Repository.IRepository;
+﻿using AppDbContext.DBContext;
+using AppDbContext.Repository.IRepository;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
@@ -6,10 +7,10 @@ namespace AppDbContext.Repository
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
-        private readonly DbContext _context;
+        private readonly GenericDbContext<T> _context;
         private readonly DbSet<T> _dbSet;
 
-        public GenericRepository(DbContext context)
+        public GenericRepository(GenericDbContext<T> context)
         {
             _context = context;
             _dbSet = _context.Set<T>();
