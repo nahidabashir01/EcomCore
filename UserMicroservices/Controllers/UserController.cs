@@ -7,12 +7,13 @@ namespace UserMicroservice.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly UserService _userService;
-        public UserController(UserService userService)
+        private readonly IUserService _userService;
+        public UserController(IUserService userService)
         {
             _userService = userService;
         }
 
+        [HttpPost("register")]
         public async Task<IActionResult> Register(UserRegistrationDto userDto)
         {
             var result = await _userService.RegisterUserAsync(userDto);

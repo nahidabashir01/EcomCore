@@ -4,3 +4,7 @@ GET {{UserMicroservice_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###
+POST {{UserMicroservice_HostAddress}}/register/
+Accept: application/json
+
+###

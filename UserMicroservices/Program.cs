@@ -1,18 +1,18 @@
-using AppDbContext.DBContext;
-using AppDbContext.Repository;
-using AppDbContext.Repository.IRepository;
-using Microsoft.EntityFrameworkCore;
-using UserMicroservice.Models;
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Identity;
+using System.Reflection;
+using UserMicroservice.Dtos.Request.RequestValidator;
+using UserMicroservice.Registrations;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddDbContext<GenericDbContext<User>>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddScoped<IGenericRepository<User>, GenericRepository<User>>();
-builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddServices(builder.Configuration);
 builder.Services.AddControllers();
+builder.Services.AddValidators();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
