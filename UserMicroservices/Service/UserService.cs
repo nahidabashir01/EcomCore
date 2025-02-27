@@ -1,9 +1,11 @@
 ﻿using AppDbContext.Repository.IRepository;
 using Constants;
 using InMemoryCache.Repository.IRepository;
+using Microsoft.IdentityModel.Tokens;
 using ServiceRespnse.Models;
 using ServiceRespnse.Repository.IRepository;
 using ServiceRespnse.Utility;
+using System.Net;
 using UserMicroservice.Dtos.Request;
 using UserMicroservice.Models;
 
@@ -38,13 +40,30 @@ public class UserService : IUserService
             Role = "User"
         };
 
-        var result = await _repository.AddAsync(newUser);
-        if (result)
+        var databaseResponse = await _repository.AddAsync(newUser);
+        if (databaseResponse)
         {
-            var isSuccess = SetData(CacheKeys.User);
+            var setCacheResponse =await SetData(CacheKeys.User);
             return await _responseRepository.FormatResponseAsync(true, StatusCode.Created, ResponseMessages.CreatedMessage, userDto);
         }
         return await _responseRepository.FormatResponseAsync(false, StatusCode.BadRequest, ResponseMessages.BadRequestMessage, userDto);
+    }
+
+    public async Task<ResponseDto<IEnumerable<User>>> ReadAllUserAsync()
+    {
+        var userList = GetData(CacheKeys.User);
+
+        if (userList.IsNullOrEmpty())
+        {
+            var setCacheResponse = await SetData(CacheKeys.User);
+            userList = setCacheResponse.Item2;
+            if (setCacheResponse.Item1)
+            {
+
+            }
+        }
+
+        return await _responseRepository.FormatResponseAsync(true, (int)HttpStatusCode.OK, "Success", userList);
     }
 
     private IEnumerable<User> GetData(string key)
@@ -57,11 +76,11 @@ public class UserService : IUserService
         return null;
     }
 
-    private async Task<bool> SetData(string key)
+    private async Task<(bool,IEnumerable<User>)> SetData(string key)
     {
         var data = await _repository.GetAllAsync();
         var expirationTime = DateTimeOffset.Now.AddMinutes(5.0);
         var success = _cacheRepository.SetData(key, data, expirationTime);
-        return success;
+        return (success,data);
     }
 }
