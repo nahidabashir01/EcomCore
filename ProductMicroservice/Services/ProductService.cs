@@ -1,5 +1,5 @@
 ﻿using AppDbContext.Repository.IRepository;
-using ProductMicroservice.Dtos;
+using ProductMicroservice.Dtos.Product;
 using ProductMicroservice.Models;
 using ProductMicroservice.Services.IService;
 using ServiceRespnse.Models;

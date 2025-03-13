@@ -25,6 +25,9 @@ namespace ProductMicroservice.Registrations
             // Register Product Service
             services.AddScoped<IProductService, ProductService>();
 
+            // Register Category Service
+            services.AddScoped<ICategoryService, CategoryService>();
+
             // Register MediatR
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(ServiceRegistration).Assembly));
 

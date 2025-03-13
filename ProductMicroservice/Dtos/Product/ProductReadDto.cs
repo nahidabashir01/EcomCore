@@ -1,4 +1,4 @@
-﻿namespace ProductMicroservice.Dtos
+﻿namespace ProductMicroservice.Dtos.Product
 {
     public class ProductReadDto
     {

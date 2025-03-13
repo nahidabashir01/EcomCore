@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using ProductMicroservice.Dtos;
+using ProductMicroservice.Dtos.Product;
 
 namespace ProductMicroservice.Queries
 {

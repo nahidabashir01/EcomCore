@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ProductMicroservice.Commands;
 using ProductMicroservice.Dtos;
+using ProductMicroservice.Dtos.Product;
 
 namespace ProductMicroservice.Controllers
 {

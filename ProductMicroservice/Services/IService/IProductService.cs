@@ -1,4 +1,4 @@
-﻿using ProductMicroservice.Dtos;
+﻿using ProductMicroservice.Dtos.Product;
 using ServiceRespnse.Models;
 
 namespace ProductMicroservice.Services.IService
