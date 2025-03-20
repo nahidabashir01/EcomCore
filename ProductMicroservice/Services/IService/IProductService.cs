@@ -7,5 +7,7 @@ namespace ProductMicroservice.Services.IService
     {
         Task<ResponseDto<Guid>> CreateProductAsync(CreateProductDto createProductDto);
         Task<ResponseDto<List<ProductDto>>> GetAllProductsAsync();
+        Task<ResponseDto<bool>> UpdateProductAsync(UpdateProductDto updateProductDto);
+        Task<ResponseDto<bool>> DeleteProductAsync(Guid productId);
     }
 }

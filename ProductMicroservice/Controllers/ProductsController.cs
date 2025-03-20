@@ -44,5 +44,23 @@ namespace ProductMicroservice.Controllers
             return NotFound(response);
         }
 
+        [HttpPut("update")]
+        public async Task<IActionResult> Update([FromForm] UpdateProductDto updateProductDto)
+        {
+            var updateProductCommand = new UpdateProductCommand { UpdateProductDto = updateProductDto };
+            var response = await _mediator.Send(updateProductCommand);
+
+            return StatusCode(response.StatusCode, response);
+        }
+
+        [HttpDelete("delete/{id}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var response = await _mediator.Send(new DeleteProductCommand { ProductId = id });
+
+            return StatusCode(response.StatusCode, response);
+        }
+
+
     }
 }
