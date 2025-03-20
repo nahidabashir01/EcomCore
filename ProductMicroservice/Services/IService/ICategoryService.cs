@@ -8,7 +8,6 @@ namespace ProductMicroservice.Services
         Task<ResponseDto<Guid>> CreateCategoryAsync(CreateCategoryDto dto);
         Task<ResponseDto<bool>> UpdateCategoryAsync(UpdateCategoryDto dto);
         Task<ResponseDto<bool>> DeleteCategoryByIdAsync(Guid categoryId);
-
         Task<ResponseDto<List<CategoryDto>>> GetAllCategoriesAsync();
     }
 }

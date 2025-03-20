@@ -1,8 +1,9 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ProductMicroservice.Commands;
-using ProductMicroservice.Dtos;
 using ProductMicroservice.Dtos.Product;
+using ProductMicroservice.Queries;
+using ServiceRespnse.Models;
 
 namespace ProductMicroservice.Controllers
 {
@@ -18,9 +19,9 @@ namespace ProductMicroservice.Controllers
         }
 
         [HttpPost("create")]
-        public async Task<IActionResult> CreateProduct([FromForm] ProductCreateDto productCreateDto)
+        public async Task<IActionResult> CreateProduct([FromForm] CreateProductDto createProductDto)
         {
-            var createProductcommand = new CreateProductCommand() { ProductCreateDto = productCreateDto };
+            var createProductcommand = new CreateProductCommand() { CreateProductDto = createProductDto };
 
             var response = await _mediator.Send(createProductcommand);
 
@@ -28,6 +29,19 @@ namespace ProductMicroservice.Controllers
                 return CreatedAtAction(nameof(CreateProduct), new { id = response.Data }, response);
 
             return Conflict(response);
+        }
+
+        [HttpGet("GetAllProducts")]
+        public async Task<ActionResult<ResponseDto<List<ProductDto>>>> GetAllProducts()
+        {
+            var query = new GetAllProductsQuery();
+
+            var response = await _mediator.Send(query);
+
+            if (response.IsSuccess)
+                return Ok(response);
+
+            return NotFound(response);
         }
 
     }

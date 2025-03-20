@@ -16,7 +16,7 @@ namespace ProductMicroservice.Handlers
 
         public async Task<ResponseDto<Guid>> Handle(CreateProductCommand request, CancellationToken cancellationToken)
         {
-            return await _productService.CreateProductAsync(request.ProductCreateDto);
+            return await _productService.CreateProductAsync(request.CreateProductDto);
         }
     }
 }

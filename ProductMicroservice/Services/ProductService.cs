@@ -11,55 +11,55 @@ namespace ProductMicroservice.Services
     public class ProductService : IProductService
     {
         private readonly IGenericRepository<Product> _repository;
-        private readonly IWebHostEnvironment _environment;
+        private readonly FileStorageService _fileStorageService;
         private readonly IResponseRepository _responseRepository;
 
-        public ProductService(IGenericRepository<Product> repository, IWebHostEnvironment environment, IResponseRepository responseRepository)
+        public ProductService(IGenericRepository<Product> repository, FileStorageService fileStorageService, IResponseRepository responseRepository)
         {
             _repository = repository;
-            _environment = environment;
             _responseRepository = responseRepository;
+            _fileStorageService = fileStorageService;
         }
 
-        public async Task<ResponseDto<Guid>> CreateProductAsync(ProductCreateDto productCreateDto)
+        public async Task<ResponseDto<Guid>> CreateProductAsync(CreateProductDto createProductDto)
         {
-            if (productCreateDto == null)
+            if (createProductDto == null)
             {
                 return await _responseRepository.FormatResponseAsync<Guid>(false, StatusCodes.Status400BadRequest, "Invalid product data", Guid.Empty);
             }
 
             var product = new Product
             {
-                Name = productCreateDto.Name,
-                Description = productCreateDto.Description,
+                Name = createProductDto.Name,
+                Description = createProductDto.Description,
+                CategoryId= createProductDto.CategoryId,
                 ImagePaths = new List<string>()
             };
 
-            if (productCreateDto.Images != null && productCreateDto.Images.Any())
+            if (createProductDto.Images != null && createProductDto.Images.Any())
             {
-                var uploadsFolder = Path.Combine(_environment.WebRootPath, "uploads");
-                Directory.CreateDirectory(uploadsFolder);
-
-                foreach (var image in productCreateDto.Images)
-                {
-                    if (image.Length > 0)
-                    {
-                        var uniqueFileName = $"{Guid.NewGuid()}{Path.GetExtension(image.FileName)}";
-                        var filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-                        using (var fileStream = new FileStream(filePath, FileMode.Create))
-                        {
-                            await image.CopyToAsync(fileStream);
-                        }
-
-                        product.ImagePaths.Add($"/uploads/{uniqueFileName}");
-                    }
-                }
+                product.ImagePaths = await _fileStorageService.SaveFilesAsync(createProductDto.Images);
             }
 
             await _repository.AddAsync(product);
-
             return await _responseRepository.FormatResponseAsync(true, StatusCodes.Status201Created, "Product created successfully", product.Id);
+
+        }
+
+        public async Task<ResponseDto<List<ProductDto>>> GetAllProductsAsync()
+        {
+            var products = await _repository.GetAllAsync();
+
+            var productDtos= products.Select(p => new ProductDto
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Description = p.Description,
+                CategoryId = p.CategoryId,
+                Images = _fileStorageService.GetFilesAsByteArray(p.ImagePaths)
+            }).ToList();
+
+            return await _responseRepository.FormatResponseAsync(true, 200, "Products retrieved successfully", productDtos);
 
         }
     }

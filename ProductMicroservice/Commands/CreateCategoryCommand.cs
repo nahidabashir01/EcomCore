@@ -6,6 +6,6 @@ namespace ProductMicroservice.Commands
 {
     public class CreateCategoryCommand : IRequest<ResponseDto<Guid>>
     {
-        public CreateCategoryDto CreateCategoryDto { get; set; }
+        public CreateCategoryDto? CreateCategoryDto { get; set; }
     }
 }

@@ -19,6 +19,7 @@ namespace ProductMicroservice.Registrations
                 options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             });
 
+            services.AddSingleton<FileStorageService>();
             // Register Repositories
             services.AddScoped<IGenericRepository<Product>, GenericRepository<Product>>();
 

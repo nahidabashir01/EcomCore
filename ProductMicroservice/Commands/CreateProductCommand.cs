@@ -6,6 +6,6 @@ namespace ProductMicroservice.Commands
 {
     public class CreateProductCommand:IRequest<ResponseDto<Guid>>
     {
-        public ProductCreateDto? ProductCreateDto {  get; set; }
+        public CreateProductDto? CreateProductDto {  get; set; }
     }
 }

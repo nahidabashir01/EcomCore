@@ -6,7 +6,7 @@ namespace ProductMicroservice.Commands
 {
     public class UpdateCategoryCommand : IRequest<ResponseDto<bool>>
     {
-        public UpdateCategoryDto UpdateCategoryDto { get; set; }
+        public UpdateCategoryDto? UpdateCategoryDto { get; set; }
 
     }
 }

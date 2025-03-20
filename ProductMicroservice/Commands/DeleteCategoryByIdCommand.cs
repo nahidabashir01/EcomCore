@@ -6,6 +6,6 @@ namespace ProductMicroservice.Commands
 {
     public class DeleteCategoryByIdCommand : IRequest<ResponseDto<bool>>
     {
-        public DeleteCategoryDto DeleteCategoryDto { get; set; }
+        public DeleteCategoryDto? DeleteCategoryDto { get; set; }
     }
 }
